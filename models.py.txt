@@ -1,0 +1,27 @@
+import sqlite3
+
+def create_table():
+    conn = sqlite3.connect('tasks.db')  # Connect to SQLite database
+    cursor = conn.cursor()
+    # Create tasks table if it doesn't already exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT,
+        deadline TEXT,
+        priority TEXT
+    )
+    ''')
+    conn.commit()
+    conn.close()
+
+def add_task_to_db(task_data):
+    conn = sqlite3.connect('tasks.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT INTO tasks (name, description, deadline, priority)
+    VALUES (?, ?, ?, ?)
+    ''', (task_data['name'], task_data['description'], task_data['deadline'], task_data['priority']))
+    conn.commit()
+    conn.close()
